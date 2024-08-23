@@ -8,18 +8,18 @@ const port = 4000;
 app.use(cors());
 app.use(express.json());
 
-const endpointUrl = "opc.tcp://192.168.1.41:102"; // Completează cu IP și portul PLC-ului tău
+const endpointUrl = "opc.tcp://192.168.1.41:102"; // Fill in with the IP and port of your PLC
 let client;
 let session;
 
-// Endpoint pentru a obține date
+// Endpoint to get data
 app.get("/data", async (req, res) => {
   if (!session) {
     return res.status(400).json({ success: false, message: "Not connected" });
   }
 
   try {
-    const dataValue = await session.readVariableValue("ns=1;s=MyVariable"); // Înlocuiește cu Node ID-ul tău
+    const dataValue = await session.readVariableValue("ns=1;s=MyVariable"); // Replace with your Node ID
     res.json({ success: true, data: dataValue.value.value });
   } catch (err) {
     console.error("Error reading data:", err);
@@ -27,7 +27,7 @@ app.get("/data", async (req, res) => {
   }
 });
 
-// Endpoint pentru conectare
+// Endpoint for connecting
 app.get("/connect", async (req, res) => {
   if (client) {
     return res
@@ -55,7 +55,7 @@ app.get("/connect", async (req, res) => {
   }
 });
 
-// Endpoint pentru deconectare
+// Endpoint for disconnecting
 app.get("/disconnect", async (req, res) => {
   try {
     if (session) {
@@ -75,7 +75,7 @@ app.get("/disconnect", async (req, res) => {
   }
 });
 
-// Pornirea serverului
+// Starting the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
